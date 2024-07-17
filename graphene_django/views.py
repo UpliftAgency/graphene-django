@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseNotAllowed
 from django.http.response import HttpResponseBadRequest
 from django.shortcuts import render
 from django.utils.decorators import classonlymethod, method_decorator
+from django.utils.functional import classproperty
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import View
 from graphql import (
@@ -496,6 +497,10 @@ class AsyncGraphQLView(GraphQLView):
         view = super().as_view(**initkwargs)
         view._is_coroutine = coroutines._is_coroutine
         return view
+
+    @classproperty
+    def view_is_async(cls):
+        return True
 
     async def dispatch(self, request, *args, **kwargs):
         try:
